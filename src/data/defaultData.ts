@@ -39,7 +39,50 @@ export const ARTICULOS_NOM_INFO: Record<string, { titulo: string; descripcion: s
   'NOM-001-SEDE-2012, Artículo 250-56': {
     titulo: 'Resistencia de electrodos tipo varilla, tubería y placa',
     descripcion: 'Un electrodo simple consistente en una varilla, tubería o placa que no tenga una resistencia a tierra de 25 ohms o menor se debe complementar con un electrodo adicional del tipo especificado en 250-52.'
+  },
+  'NOM-001-SEDE-2012, Artículos 110-27(a), 110-14(a) y 300-12': {
+    titulo: 'Resguardo de partes vivas, Terminales y Continuidad de canalizaciones',
+    descripcion: 'Art. 110-27(a): Las partes vivas de los equipos eléctricos que funcionen a 50 volts o más deben estar resguardadas contra contacto accidental. Art. 110-14(a): La conexión de los conductores a las terminales debe asegurar una unión firme sin dañar los conductores. Art. 300-12: Las canalizaciones deben ser continuas entre cajas, gabinetes y accesorios.'
+  },
+  'NOM-001-SEDE-2012, Artículos 410-10(a) y 410-5': {
+    titulo: 'Luminarias en lugares húmedos y Protección contra daño físico',
+    descripcion: 'Art. 410-10(a): Las luminarias instaladas en lugares húmedos o mojados deben estar aprobadas para tales condiciones y evitar la entrada de agua. Art. 410-5: Las luminarias expuestas a daño físico deben estar protegidas con pantallas o resguardos adecuados.'
+  },
+  'NOM-001-SEDE-2012, Artículo 110-16': {
+    titulo: 'Advertencia contra arco eléctrico (Arc Flash)',
+    descripcion: 'Art. 110-16: Los equipos eléctricos como tableros de distribución, centros de control de motores y subestaciones deben estar marcados en campo para advertir al personal calificado sobre el peligro potencial de relámpago de arco eléctrico antes del examen, ajuste o mantenimiento.'
   }
+};
+
+export const REPORTE_SEGURIDAD_CAMPO = {
+  total_no_conformidades: 3,
+  resumen_hallazgos: "Riesgo general Alto debido a partes vivas no aisladas en tablero general, ausencia de señalización de arco eléctrico en subestación y uso de luminarias inadecuadas en área de maniobras.",
+  lista_observaciones: [
+    {
+      id_observacion: 1,
+      elemento_inspeccionado: "Tablero general de distribución (Acometida a interruptor principal)",
+      clasificacion_riesgo: "Alto" as const,
+      descripcion_hallazgo: "Conductores de alimentación principal expuestos sin canalización continua ni conector apropiado en la entrada al gabinete, y carencia de terminales de compresión certificadas en la llegada a las zapatas del interruptor principal, exponiendo partes vivas con riesgo inminente de contacto accidental y arqueo.",
+      articulo_nom_001: "NOM-001-SEDE-2012, Artículos 110-27(a), 110-14(a) y 300-12",
+      medida_correctiva: "Instalar canalización cerrada (tubería conduit metálica con monitor y contratuerca) hasta el gabinete del tablero, peinar conductores y prensar terminales de compresión calibradas al calibre del cable para garantizar hermeticidad y resguardo de partes energizadas."
+    },
+    {
+      id_observacion: 2,
+      elemento_inspeccionado: "Área de carga/descarga (Almacén)",
+      clasificacion_riesgo: "Medio" as const,
+      descripcion_hallazgo: "Luminarias de tipo y manufactura residencial instaladas en área de maniobra logística, desprovistas de envolvente hermética contra humedad y carentes de pantalla de protección mecánica contra impactos producidos por montacargas o estiba de mercancías.",
+      articulo_nom_001: "NOM-001-SEDE-2012, Artículos 410-10(a) y 410-5",
+      medida_correctiva: "Sustituir las luminarias residenciales por luminarias industriales tipo estancas (grado de protección IP65 / Wet Locations) equipadas con difusor de policarbonato de alto impacto o guarda metálica de protección."
+    },
+    {
+      id_observacion: 3,
+      elemento_inspeccionado: "Subestación compacta",
+      clasificacion_riesgo: "Alto" as const,
+      descripcion_hallazgo: "Ausencia de etiqueta de advertencia de peligro de relámpago de arco eléctrico (Arc Flash) y riesgo de choque eléctrico en el frente del gabinete de la subestación compacta, omitiendo el nivel de equipo de protección personal (EPP) y distancia de seguridad requeridos para su operación.",
+      articulo_nom_001: "NOM-001-SEDE-2012, Artículo 110-16",
+      medida_correctiva: "Elaborar y colocar una placa permanente y legible en el exterior del gabinete frontal que advierta el peligro de arco eléctrico conforme a la NOM-001-SEDE Art. 110-16 y NFPA 70E, especificando tensión nominal, frontera de relámpago de arco y categoría de EPP obligatoria."
+    }
+  ]
 };
 
 export function generarDictamenJSON(datos: DatosLevantamiento): DictamenTecnicoJSON {

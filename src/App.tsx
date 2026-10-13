@@ -13,23 +13,23 @@ import {
   Check, 
   BookOpen, 
   ShieldAlert, 
-  Sparkles,
-  Download,
   AlertTriangle,
-  ExternalLink
+  Camera
 } from 'lucide-react';
 import { DatosLevantamiento } from './types/dictamen';
-import { CASO_ABARROTES_AZTECA, generarDictamenJSON } from './data/defaultData';
+import { CASO_ABARROTES_AZTECA, generarDictamenJSON, REPORTE_SEGURIDAD_CAMPO } from './data/defaultData';
 import { ExecutiveSummaryView } from './components/ExecutiveSummaryView';
+import { SecurityReportView } from './components/SecurityReportView';
 import { JsonViewer } from './components/JsonViewer';
 import { InspectionEditor } from './components/InspectionEditor';
 import { NomGuideModal } from './components/NomGuideModal';
 
-type TabType = 'dictamen' | 'json' | 'editor';
+type TabType = 'seguridad' | 'dictamen' | 'json' | 'editor';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<TabType>('dictamen');
+  const [activeTab, setActiveTab] = useState<TabType>('seguridad');
   const [datosLevantamiento, setDatosLevantamiento] = useState<DatosLevantamiento>(CASO_ABARROTES_AZTECA);
+  const [selectedJsonView, setSelectedJsonView] = useState<'seguridad' | 'dictamen'>('seguridad');
   const [copiedHeader, setCopiedHeader] = useState(false);
   const [isNomModalOpen, setIsNomModalOpen] = useState(false);
   const [selectedNomArticle, setSelectedNomArticle] = useState<string | null>(null);
@@ -39,9 +39,11 @@ export default function App() {
     return generarDictamenJSON(datosLevantamiento);
   }, [datosLevantamiento]);
 
+  const activeJson = selectedJsonView === 'seguridad' ? REPORTE_SEGURIDAD_CAMPO : dictamenJSON;
+
   const handleCopyQuickJson = async () => {
     try {
-      const jsonStr = JSON.stringify(dictamenJSON, null, 2);
+      const jsonStr = JSON.stringify(activeJson, null, 2);
       await navigator.clipboard.writeText(jsonStr);
       setCopiedHeader(true);
       setTimeout(() => setCopiedHeader(false), 2000);
@@ -99,7 +101,7 @@ export default function App() {
             <button
               onClick={handlePrint}
               className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
-              title="Imprimir dictamen técnico"
+              title="Imprimir reporte técnico"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Imprimir</span>
@@ -131,9 +133,28 @@ export default function App() {
         {/* Sub Navigation Bar / Tabs */}
         <div className="bg-slate-950/70 border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 overflow-x-auto">
-            <nav className="flex space-x-1 sm:space-x-3 py-2 text-xs font-medium">
+            <nav className="flex space-x-1 sm:space-x-2 py-2 text-xs font-medium">
               <button
-                onClick={() => setActiveTab('dictamen')}
+                onClick={() => {
+                  setActiveTab('seguridad');
+                  setSelectedJsonView('seguridad');
+                }}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'seguridad'
+                    ? 'bg-rose-600 text-white font-semibold'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+              >
+                <Camera className="w-3.5 h-3.5" />
+                <span>Reporte de Evidencias (Seguridad)</span>
+                <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveTab('dictamen');
+                  setSelectedJsonView('dictamen');
+                }}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   activeTab === 'dictamen'
                     ? 'bg-blue-600 text-white font-semibold'
@@ -141,7 +162,7 @@ export default function App() {
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>Dictamen Técnico</span>
+                <span>Dictamen Técnico (Tierra & Tablero)</span>
               </button>
 
               <button
@@ -153,8 +174,7 @@ export default function App() {
                 }`}
               >
                 <Code2 className="w-3.5 h-3.5" />
-                <span>JSON Solicitado</span>
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span>JSON Exportable</span>
               </button>
 
               <button
@@ -171,10 +191,10 @@ export default function App() {
             </nav>
 
             <div className="hidden lg:flex items-center gap-2 text-[11px] text-slate-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>Resistencia medida: <strong>{datosLevantamiento.resistencia_tierra_ohms} Ω</strong></span>
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
+              <span>3 no conformidades de campo</span>
               <span className="text-slate-600">|</span>
-              <span className="text-amber-400 font-medium">No Aprobado con condicionantes</span>
+              <span className="text-amber-400 font-medium">Nivel de Riesgo: Alto</span>
             </div>
           </div>
         </div>
@@ -182,28 +202,38 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
-        {/* Banner Alert for quick overview */}
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm text-amber-900 print:hidden">
+        {/* Banner Alert */}
+        <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm text-rose-950 print:hidden">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
             <div>
-              <strong className="font-bold">Datos procesados con éxito:</strong>
-              <p className="text-amber-800/90 text-xs mt-0.5">
-                Se procesaron los datos de la visita a <em>Abarrotes Azteca Suc. Tijeras</em>. La resistencia de tierra (18.5 Ω) cumple el límite de 25 Ω (Art. 250-56); no obstante, existen condicionantes normativas en el tablero principal y en la protección del conductor a tierra en almacén.
+              <strong className="font-bold">Evidencias Fotográficas Procesadas:</strong>
+              <p className="text-rose-900/90 text-xs mt-0.5">
+                Se identificaron 3 no conformidades críticas: cables expuestos sin canalización en tablero, luminarias residenciales en área de carga y falta de etiqueta contra arco eléctrico (Arc Flash) en la subestación.
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={() => setActiveTab('json')}
-              className="text-xs font-bold text-amber-800 bg-amber-200/60 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+              onClick={() => {
+                setSelectedJsonView('seguridad');
+                setActiveTab('json');
+              }}
+              className="text-xs font-bold text-rose-900 bg-rose-200/80 hover:bg-rose-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
             >
-              <Code2 className="w-3.5 h-3.5" /> Ver JSON Directo
+              <Code2 className="w-3.5 h-3.5" /> Ver JSON de Seguridad
             </button>
           </div>
         </div>
 
         {/* Tab views */}
+        {activeTab === 'seguridad' && (
+          <SecurityReportView
+            reporte={REPORTE_SEGURIDAD_CAMPO}
+            onOpenNomDetail={handleOpenNomArticle}
+          />
+        )}
+
         {activeTab === 'dictamen' && (
           <ExecutiveSummaryView
             datos={datosLevantamiento}
@@ -214,16 +244,47 @@ export default function App() {
 
         {activeTab === 'json' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <Code2 className="w-4 h-4 text-amber-600" />
-                JSON con la estructura exacta solicitada:
-              </h2>
-              <span className="text-xs text-slate-500">
-                Respuesta estructurada para consumo por API o reporte
-              </span>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  Seleccionar JSON a visualizar:
+                </span>
+                <div className="inline-flex rounded-lg border border-slate-300 p-0.5 bg-white text-xs">
+                  <button
+                    onClick={() => setSelectedJsonView('seguridad')}
+                    className={`px-3 py-1 rounded-md font-semibold transition-colors ${
+                      selectedJsonView === 'seguridad'
+                        ? 'bg-rose-600 text-white'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Reporte de Evidencias (3 Hallazgos)
+                  </button>
+                  <button
+                    onClick={() => setSelectedJsonView('dictamen')}
+                    className={`px-3 py-1 rounded-md font-semibold transition-colors ${
+                      selectedJsonView === 'dictamen'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Dictamen Técnico (Resistencia Tierra)
+                  </button>
+                </div>
+              </div>
             </div>
-            <JsonViewer data={dictamenJSON} />
+
+            {selectedJsonView === 'seguridad' ? (
+              <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                <div className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed bg-[#0d1117] text-slate-300 max-h-[600px] overflow-y-auto">
+                  <pre>
+                    <code>{JSON.stringify(REPORTE_SEGURIDAD_CAMPO, null, 2)}</code>
+                  </pre>
+                </div>
+              </div>
+            ) : (
+              <JsonViewer data={dictamenJSON} />
+            )}
           </div>
         )}
 

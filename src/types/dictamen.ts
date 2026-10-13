@@ -35,3 +35,18 @@ export interface DatosLevantamiento {
     severidad: 'alta' | 'media' | 'baja';
   }[];
 }
+
+export interface ObservacionSeguridad {
+  id_observacion: number;
+  elemento_inspeccionado: string;
+  clasificacion_riesgo: 'Alto' | 'Medio' | 'Bajo';
+  descripcion_hallazgo: string;
+  articulo_nom_001: string;
+  medida_correctiva: string;
+}
+
+export interface ReporteObservacionesSeguridadJSON {
+  total_no_conformidades: number;
+  resumen_hallazgos: string;
+  lista_observaciones: ObservacionSeguridad[];
+}
