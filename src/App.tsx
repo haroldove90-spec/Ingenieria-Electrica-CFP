@@ -1,0 +1,270 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useMemo } from 'react';
+import { 
+  FileText, 
+  Code2, 
+  SlidersHorizontal, 
+  Printer, 
+  Copy, 
+  Check, 
+  BookOpen, 
+  ShieldAlert, 
+  Sparkles,
+  Download,
+  AlertTriangle,
+  ExternalLink
+} from 'lucide-react';
+import { DatosLevantamiento } from './types/dictamen';
+import { CASO_ABARROTES_AZTECA, generarDictamenJSON } from './data/defaultData';
+import { ExecutiveSummaryView } from './components/ExecutiveSummaryView';
+import { JsonViewer } from './components/JsonViewer';
+import { InspectionEditor } from './components/InspectionEditor';
+import { NomGuideModal } from './components/NomGuideModal';
+
+type TabType = 'dictamen' | 'json' | 'editor';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState<TabType>('dictamen');
+  const [datosLevantamiento, setDatosLevantamiento] = useState<DatosLevantamiento>(CASO_ABARROTES_AZTECA);
+  const [copiedHeader, setCopiedHeader] = useState(false);
+  const [isNomModalOpen, setIsNomModalOpen] = useState(false);
+  const [selectedNomArticle, setSelectedNomArticle] = useState<string | null>(null);
+
+  // Memoize generated JSON based on current inputs
+  const dictamenJSON = useMemo(() => {
+    return generarDictamenJSON(datosLevantamiento);
+  }, [datosLevantamiento]);
+
+  const handleCopyQuickJson = async () => {
+    try {
+      const jsonStr = JSON.stringify(dictamenJSON, null, 2);
+      await navigator.clipboard.writeText(jsonStr);
+      setCopiedHeader(true);
+      setTimeout(() => setCopiedHeader(false), 2000);
+    } catch {
+      setActiveTab('json');
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleOpenNomArticle = (articulo: string) => {
+    setSelectedNomArticle(articulo);
+    setIsNomModalOpen(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col font-sans">
+      {/* Top Application Bar */}
+      <header className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 print:hidden shadow-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black tracking-tight text-base shadow-sm">
+              ⚡
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-sm sm:text-base tracking-tight text-white">
+                  Dictamen Eléctrico NOM-001-SEDE
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  UVIE Auditor
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-md">
+                Abarrotes Azteca Suc. Tijeras • Subestación 75 kVA
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Header Actions */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                setSelectedNomArticle(null);
+                setIsNomModalOpen(true);
+              }}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+              <span>NOM-001</span>
+            </button>
+
+            <button
+              onClick={handlePrint}
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+              title="Imprimir dictamen técnico"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Imprimir</span>
+            </button>
+
+            <button
+              onClick={handleCopyQuickJson}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm ${
+                copiedHeader
+                  ? 'bg-emerald-500 text-slate-950'
+                  : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+              }`}
+            >
+              {copiedHeader ? (
+                <>
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>¡JSON Copiado!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copiar JSON</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Sub Navigation Bar / Tabs */}
+        <div className="bg-slate-950/70 border-t border-slate-800/80 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 overflow-x-auto">
+            <nav className="flex space-x-1 sm:space-x-3 py-2 text-xs font-medium">
+              <button
+                onClick={() => setActiveTab('dictamen')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'dictamen'
+                    ? 'bg-blue-600 text-white font-semibold'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Dictamen Técnico</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('json')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'json'
+                    ? 'bg-amber-500 text-slate-950 font-semibold'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+              >
+                <Code2 className="w-3.5 h-3.5" />
+                <span>JSON Solicitado</span>
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              </button>
+
+              <button
+                onClick={() => setActiveTab('editor')}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'editor'
+                    ? 'bg-slate-700 text-white font-semibold'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                <span>Datos de Levantamiento</span>
+              </button>
+            </nav>
+
+            <div className="hidden lg:flex items-center gap-2 text-[11px] text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span>Resistencia medida: <strong>{datosLevantamiento.resistencia_tierra_ohms} Ω</strong></span>
+              <span className="text-slate-600">|</span>
+              <span className="text-amber-400 font-medium">No Aprobado con condicionantes</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+        {/* Banner Alert for quick overview */}
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm text-amber-900 print:hidden">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-bold">Datos procesados con éxito:</strong>
+              <p className="text-amber-800/90 text-xs mt-0.5">
+                Se procesaron los datos de la visita a <em>Abarrotes Azteca Suc. Tijeras</em>. La resistencia de tierra (18.5 Ω) cumple el límite de 25 Ω (Art. 250-56); no obstante, existen condicionantes normativas en el tablero principal y en la protección del conductor a tierra en almacén.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setActiveTab('json')}
+              className="text-xs font-bold text-amber-800 bg-amber-200/60 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+            >
+              <Code2 className="w-3.5 h-3.5" /> Ver JSON Directo
+            </button>
+          </div>
+        </div>
+
+        {/* Tab views */}
+        {activeTab === 'dictamen' && (
+          <ExecutiveSummaryView
+            datos={datosLevantamiento}
+            dictamen={dictamenJSON}
+            onOpenNomDetail={handleOpenNomArticle}
+          />
+        )}
+
+        {activeTab === 'json' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <Code2 className="w-4 h-4 text-amber-600" />
+                JSON con la estructura exacta solicitada:
+              </h2>
+              <span className="text-xs text-slate-500">
+                Respuesta estructurada para consumo por API o reporte
+              </span>
+            </div>
+            <JsonViewer data={dictamenJSON} />
+          </div>
+        )}
+
+        {activeTab === 'editor' && (
+          <InspectionEditor
+            datos={datosLevantamiento}
+            onChange={setDatosLevantamiento}
+          />
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 print:hidden mt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-slate-800">Dictamen NOM-001-SEDE</span>
+            <span>•</span>
+            <span>Instalaciones Eléctricas de Utilización</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                setSelectedNomArticle(null);
+                setIsNomModalOpen(true);
+              }}
+              className="hover:text-blue-600 transition-colors"
+            >
+              Marco Normativo
+            </button>
+            <span>•</span>
+            <span>Secretaría de Energía (SENER)</span>
+          </div>
+        </div>
+      </footer>
+
+      {/* NOM Reference Modal */}
+      <NomGuideModal
+        isOpen={isNomModalOpen}
+        onClose={() => setIsNomModalOpen(false)}
+        selectedArticle={selectedNomArticle}
+      />
+    </div>
+  );
+}

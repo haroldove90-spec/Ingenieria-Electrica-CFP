@@ -1,0 +1,6 @@
+{
+  "name": "Dictamen Eléctrico NOM-001-SEDE",
+  "description": "Plataforma de dictamen técnico y procesamiento de levantamientos eléctricos bajo la norma NOM-001-SEDE.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
