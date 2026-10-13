@@ -108,6 +108,53 @@ export const ANALISIS_PARAMETROS_ELECTRICOS = {
   ]
 };
 
+export const DICTAMEN_OFICIAL_COMPLETO = {
+  encabezado_dictamen: {
+    folio: "CFP0125/PCIEMBT/IOA/0071/14XII20 - 359/2026",
+    fecha: "02-oct-26",
+    giro: "Comercio al por menor de abarrotes, alimentos, bebidas, hielo y tabaco"
+  },
+  datos_instalacion: {
+    razon_social: "ABARROTES AZTECA TIJERAS S.A DE C.V",
+    nombre_comercial: "ABARROTES AZTECA SUC. TIJERAS",
+    rfc: "AAT170629U46",
+    domicilio: "JUAN DE BAEZA #600, COL. DIECIOCHO DE MAYO, MORELIA, MICHOACÁN",
+    cp: "58258"
+  },
+  caracteristicas_tecnicas: {
+    tipo_subestacion: "TRANSFORMADOR TIPO PEDESTAL",
+    capacidad_kva: 75,
+    tension_suministro: "13200V - 220/127V 3F-4H",
+    carga_instalada_kw: 27.25,
+    carga_operacion_kw: 13.62
+  },
+  mediciones_electricas: {
+    voltajes: {
+      van: 127,
+      vbn: 127,
+      vcn: 127,
+      vab: 220,
+      vbc: 220,
+      vca: 220
+    },
+    corrientes: {
+      fase_a: 38,
+      fase_b: 38,
+      fase_c: 35.3,
+      neutro: 89
+    },
+    sistema_tierra: {
+      estado: "CUMPLE",
+      valor_ohms: "Adecuado"
+    }
+  },
+  perito_responsable: {
+    nombre: "ING. ISRAEL OROZCO ARIAS",
+    registro: "CFP0125/PCIEMBT/IOA/0071/14XII20",
+    cedula: "15240154"
+  }
+};
+
 export function generarDictamenJSON(datos: DatosLevantamiento): DictamenTecnicoJSON {
   const cumpleTierra = datos.resistencia_tierra_ohms <= 25.0;
   

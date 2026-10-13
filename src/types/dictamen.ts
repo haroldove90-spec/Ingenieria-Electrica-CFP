@@ -77,3 +77,61 @@ export interface AnalisisParametrosElectricosJSON {
   recomendaciones_operativas: string[];
 }
 
+export interface EncabezadoDictamen {
+  folio: string;
+  fecha: string;
+  giro: string;
+}
+
+export interface DatosInstalacion {
+  razon_social: string;
+  nombre_comercial: string;
+  rfc: string;
+  domicilio: string;
+  cp: string;
+}
+
+export interface CaracteristicasTecnicas {
+  tipo_subestacion: string;
+  capacidad_kva: number;
+  tension_suministro: string;
+  carga_instalada_kw: number;
+  carga_operacion_kw: number;
+}
+
+export interface MedicionesElectricas {
+  voltajes: {
+    van: number;
+    vbn: number;
+    vcn: number;
+    vab: number;
+    vbc: number;
+    vca: number;
+  };
+  corrientes: {
+    fase_a: number;
+    fase_b: number;
+    fase_c: number;
+    neutro: number;
+  };
+  sistema_tierra: {
+    estado: string;
+    valor_ohms: string;
+  };
+}
+
+export interface PeritoResponsable {
+  nombre: string;
+  registro: string;
+  cedula: string;
+}
+
+export interface DictamenOficialGeneralJSON {
+  encabezado_dictamen: EncabezadoDictamen;
+  datos_instalacion: DatosInstalacion;
+  caracteristicas_tecnicas: CaracteristicasTecnicas;
+  mediciones_electricas: MedicionesElectricas;
+  perito_responsable: PeritoResponsable;
+}
+
+
