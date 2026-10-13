@@ -122,6 +122,15 @@ export default function App() {
             </button>
 
             <button
+              onClick={() => setActiveTab('editor')}
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm"
+              title="Crear un nuevo estudio técnico"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>+ Nuevo Estudio</span>
+            </button>
+
+            <button
               onClick={handleExportFullReport}
               className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all ${
                 downloadSuccess ? 'text-emerald-400 border-emerald-500/50' : ''

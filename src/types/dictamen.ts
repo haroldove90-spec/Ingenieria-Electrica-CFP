@@ -148,5 +148,25 @@ export interface ReporteObservacionesFisicasJSON {
   detalle_observaciones: DetalleObservacionFisica[];
 }
 
+export interface NuevoEstudioJSON {
+  encabezado_dictamen: {
+    folio: string;
+    fecha: string;
+  };
+  datos_instalacion: {
+    razon_social: string;
+    nombre_comercial: string;
+    domicilio: string;
+  };
+  caracteristicas_tecnicas: {
+    capacidad_kva: number;
+    carga_instalada_kw: number;
+  };
+  analisis_y_no_conformidades: {
+    resistencia_tierra_ohms: number;
+    observaciones_analizadas: string;
+  };
+}
+
 
 
