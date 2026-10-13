@@ -58,35 +58,35 @@ export const OfficialDictamenCard: React.FC<OfficialDictamenCardProps> = ({ data
       {/* Official Certificate Formatted View */}
       <div className="bg-white border-2 border-slate-300 rounded-2xl shadow-md overflow-hidden print:border-none print:shadow-none">
         {/* Certificate Top Banner */}
-        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-6 sm:p-7 border-b-4 border-amber-500">
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-4 sm:p-7 border-b-4 border-amber-500">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-amber-400 text-slate-950">
+            <div className="space-y-1.5 min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold tracking-wider uppercase bg-amber-400 text-slate-950">
                   Dictamen Oficial de Verificación
                 </span>
                 <span className="text-xs text-slate-300 font-mono">
                   NOM-001-SEDE
                 </span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tight text-white break-words">
                 {data.datos_instalacion.razon_social}
               </h1>
-              <p className="text-xs sm:text-sm text-amber-300 font-semibold flex items-center gap-2">
+              <p className="text-xs sm:text-sm text-amber-300 font-semibold flex flex-wrap items-center gap-2">
                 <span>{data.datos_instalacion.nombre_comercial}</span>
                 <span>•</span>
                 <span className="font-mono text-slate-200">RFC: {data.datos_instalacion.rfc}</span>
               </p>
             </div>
 
-            <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-right space-y-1">
-              <div className="text-[11px] text-slate-400 font-mono">
+            <div className="bg-slate-800/90 p-3 rounded-xl border border-slate-700 text-left sm:text-right space-y-1 shrink-0 max-w-full">
+              <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono">
                 Folio Oficial:
               </div>
-              <div className="text-xs sm:text-sm font-mono font-bold text-amber-400">
+              <div className="text-xs sm:text-sm font-mono font-bold text-amber-400 break-all">
                 {data.encabezado_dictamen.folio}
               </div>
-              <div className="text-[11px] text-slate-400 flex items-center justify-end gap-1">
+              <div className="text-[11px] text-slate-400 flex items-center justify-start sm:justify-end gap-1">
                 <Calendar className="w-3.5 h-3.5" /> {data.encabezado_dictamen.fecha}
               </div>
             </div>
@@ -94,12 +94,12 @@ export const OfficialDictamenCard: React.FC<OfficialDictamenCardProps> = ({ data
         </div>
 
         {/* Certificate Body Content */}
-        <div className="p-6 sm:p-8 space-y-6">
+        <div className="p-4 sm:p-7 space-y-6">
           {/* Giro & Domicilio */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200 text-xs sm:text-sm">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-1">
-                <Briefcase className="w-3.5 h-3.5 text-blue-600" /> Giro de la Actividad
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-1">
+                <Briefcase className="w-3.5 h-3.5 text-blue-600 shrink-0" /> Giro de la Actividad
               </span>
               <p className="font-semibold text-slate-800 leading-snug">
                 {data.encabezado_dictamen.giro}
@@ -107,8 +107,8 @@ export const OfficialDictamenCard: React.FC<OfficialDictamenCardProps> = ({ data
             </div>
 
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-1">
-                <MapPin className="w-3.5 h-3.5 text-rose-600" /> Domicilio de la Instalación
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-1">
+                <MapPin className="w-3.5 h-3.5 text-rose-600 shrink-0" /> Domicilio de la Instalación
               </span>
               <p className="font-semibold text-slate-800 leading-snug">
                 {data.datos_instalacion.domicilio}, C.P. {data.datos_instalacion.cp}
@@ -122,29 +122,29 @@ export const OfficialDictamenCard: React.FC<OfficialDictamenCardProps> = ({ data
               <Zap className="w-4 h-4 text-amber-500" />
               Características Técnicas del Suministro
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
                 <div className="text-[11px] text-slate-500 mb-0.5">Subestación</div>
                 <div className="font-bold text-xs sm:text-sm text-slate-900 leading-tight">
                   {data.caracteristicas_tecnicas.tipo_subestacion}
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
                 <div className="text-[11px] text-slate-500 mb-0.5">Capacidad Transformador</div>
                 <div className="font-bold text-sm sm:text-base text-slate-900 font-mono">
                   {data.caracteristicas_tecnicas.capacidad_kva} <span className="text-xs font-normal text-slate-500">kVA</span>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
                 <div className="text-[11px] text-slate-500 mb-0.5">Tensión de Suministro</div>
-                <div className="font-bold text-xs sm:text-sm text-slate-900 font-mono">
+                <div className="font-bold text-xs sm:text-sm text-slate-900 font-mono break-all">
                   {data.caracteristicas_tecnicas.tension_suministro}
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
                 <div className="text-[11px] text-slate-500 mb-0.5">Carga Instalada / Operación</div>
                 <div className="font-bold text-xs sm:text-sm text-slate-900 font-mono">
                   {data.caracteristicas_tecnicas.carga_instalada_kw} kW / {data.caracteristicas_tecnicas.carga_operacion_kw} kW

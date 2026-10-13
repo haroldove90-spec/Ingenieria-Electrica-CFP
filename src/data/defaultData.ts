@@ -155,6 +155,27 @@ export const DICTAMEN_OFICIAL_COMPLETO = {
   }
 };
 
+export const OBSERVACIONES_FISICAS_SUBESTACION = {
+  total_observaciones: 2,
+  normativa_aplicada: "NOM-001-SEDE",
+  detalle_observaciones: [
+    {
+      consecutivo: 1,
+      elemento_afectado: "Subestación compacta / Envolvente",
+      descripcion_no_conformidad: "Ausencia de letreros preventivos y señales de advertencia de peligro por alta tensión y riesgo eléctrico en las puertas de acceso al envolvente de la subestación compacta, contraviniendo las disposiciones de seguridad para locales y equipos de transformación.",
+      articulo_nom: "NOM-001-SEDE-2012, Artículos 110-21, 110-34(c) y 450-14",
+      accion_correctiva_requerida: "Suministrar y fijar en el exterior de las puertas letreros permanentes y legibles con la leyenda de advertencia 'PELIGRO - ALTA TENSIÓN' y pictograma de riesgo eléctrico normalizado."
+    },
+    {
+      consecutivo: 2,
+      elemento_afectado: "Sistema de Puesta a Tierra",
+      descripcion_no_conformidad: "El conductor del electrodo de puesta a tierra principal carece de un registro visible, pozo de visita o punto de prueba accesible que permita la inspección física y desconexión para medición periódica de resistencia.",
+      articulo_nom: "NOM-001-SEDE-2012, Artículos 250-68(a) y 250-70",
+      accion_correctiva_requerida: "Construir o instalar una caja de registro de concreto o PVC reforzado con tapa accesible para alojar el electrodo y el conector, habilitando un punto de prueba normativo para mantenimiento."
+    }
+  ]
+};
+
 export function generarDictamenJSON(datos: DatosLevantamiento): DictamenTecnicoJSON {
   const cumpleTierra = datos.resistencia_tierra_ohms <= 25.0;
   

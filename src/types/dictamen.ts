@@ -134,4 +134,19 @@ export interface DictamenOficialGeneralJSON {
   perito_responsable: PeritoResponsable;
 }
 
+export interface DetalleObservacionFisica {
+  consecutivo: number;
+  elemento_afectado: string;
+  descripcion_no_conformidad: string;
+  articulo_nom: string;
+  accion_correctiva_requerida: string;
+}
+
+export interface ReporteObservacionesFisicasJSON {
+  total_observaciones: number;
+  normativa_aplicada: string;
+  detalle_observaciones: DetalleObservacionFisica[];
+}
+
+
 
