@@ -85,6 +85,29 @@ export const REPORTE_SEGURIDAD_CAMPO = {
   ]
 };
 
+export const ANALISIS_PARAMETROS_ELECTRICOS = {
+  evaluacion_capacidad_subestacion: {
+    porcentaje_utilizacion: "69.3%",
+    estado_capacidad: "Adecuado" as const,
+    diagnostico_tecnico: "El transformador de 75 kVA opera en una zona de carga adecuada (69.3%), manteniendo una reserva de potencia de aproximadamente 23.0 kVA (30.7%) para absorber picos de demanda y futuras ampliaciones sin sobrecalentamiento."
+  },
+  evaluacion_balance_fases: {
+    porcentaje_desbalance: "18%",
+    estado_balance: "Fuera de límite" as const,
+    observacion_balance: "El desbalance de corrientes (L1=140A, L2=138A vs L3=110A) excede el umbral máximo recomendado del 5% al 10%, provocando circulación innecesaria de corriente por el neutro y calentamiento asimétrico en devanados del transformador."
+  },
+  evaluacion_sistema_tierra: {
+    valor_resistencia_ohms: 18.5,
+    limite_maximo_nom: 25,
+    cumplimiento: "Cumple",
+    dictamen_tierra: "La resistencia de 18.5 Ω cumple con el valor permisible menor o igual a 25 Ω establecido en la NOM-001-SEDE Art. 250-56, garantizando una trayectoria de baja impedancia para la disipación de corrientes de falla."
+  },
+  recomendaciones_operativas: [
+    "Efectuar el rebalanceo de cargas monofásicas en el tablero general de distribución, reubicando circuitos de las fases L1 y L2 hacia la fase L3 para reducir el desequilibrio a valores inferiores al 5%.",
+    "Realizar una inspección termográfica en bornes de media y baja tensión del transformador y zapatas del interruptor principal para descartar puntos calientes provocados por el desbalance de carga."
+  ]
+};
+
 export function generarDictamenJSON(datos: DatosLevantamiento): DictamenTecnicoJSON {
   const cumpleTierra = datos.resistencia_tierra_ohms <= 25.0;
   

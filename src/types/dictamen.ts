@@ -50,3 +50,30 @@ export interface ReporteObservacionesSeguridadJSON {
   resumen_hallazgos: string;
   lista_observaciones: ObservacionSeguridad[];
 }
+
+export interface EvaluacionCapacidadSubestacion {
+  porcentaje_utilizacion: string;
+  estado_capacidad: 'Adecuado' | 'Sobrecargado' | 'Subutilizado';
+  diagnostico_tecnico: string;
+}
+
+export interface EvaluacionBalanceFases {
+  porcentaje_desbalance: string;
+  estado_balance: 'Aceptable' | 'Fuera de límite';
+  observacion_balance: string;
+}
+
+export interface EvaluacionSistemaTierraMedicion {
+  valor_resistencia_ohms: number;
+  limite_maximo_nom: number;
+  cumplimiento: string;
+  dictamen_tierra: string;
+}
+
+export interface AnalisisParametrosElectricosJSON {
+  evaluacion_capacidad_subestacion: EvaluacionCapacidadSubestacion;
+  evaluacion_balance_fases: EvaluacionBalanceFases;
+  evaluacion_sistema_tierra: EvaluacionSistemaTierraMedicion;
+  recomendaciones_operativas: string[];
+}
+
