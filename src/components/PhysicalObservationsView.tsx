@@ -192,55 +192,6 @@ export const PhysicalObservationsView: React.FC<PhysicalObservationsViewProps> =
           </table>
         </div>
       </div>
-
-      {/* JSON Output Section */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-        <div className="bg-slate-950/80 px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Code2 className="w-4 h-4 text-amber-400" />
-            <span className="text-xs sm:text-sm font-semibold text-slate-200">
-              JSON Oficial: Observaciones Normativas (Subestación y Tableros)
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleCopy}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                copied
-                  ? 'bg-emerald-500 text-slate-950'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
-              }`}
-            >
-              {copied ? (
-                <>
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  ¡Copiado!
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5" />
-                  Copiar JSON
-                </>
-              )}
-            </button>
-
-            <button
-              onClick={handleDownload}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Descargar .json
-            </button>
-          </div>
-        </div>
-
-        <div className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed bg-[#0d1117] text-slate-300 max-h-[500px] overflow-y-auto">
-          <pre className="break-normal">
-            <code>{jsonString}</code>
-          </pre>
-        </div>
-      </div>
     </div>
   );
 };
